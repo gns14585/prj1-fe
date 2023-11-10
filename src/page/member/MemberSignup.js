@@ -16,11 +16,16 @@ export function MemberSignup() {
   const [passwordCheck, setPasswordCheck] = useState("");
   const [email, setEmail] = useState("");
   const [idAvailable, setIdAvailable] = useState(false);
+  const [emailAvailable, setEmailAvailable] = useState(false);
 
   // 암호가 다르거나, 입력하지 않았을경우 error로 인식되어서 입력해달라는 문구 추가
   let submitAvailable = true;
 
   if (!idAvailable) {
+    submitAvailable = false;
+  }
+
+  if (!emailAvailable) {
     submitAvailable = false;
   }
 
@@ -54,6 +59,21 @@ export function MemberSignup() {
       .catch((error) => {
         if (error.response.status === 404) {
           setIdAvailable(true);
+        }
+      });
+  }
+
+  function handleEmailCheck() {
+    const searchParams = new URLSearchParams();
+    searchParams.set("email", email);
+    axios
+      .get("/api/email/check?" + searchParams.toString())
+      .then(() => {
+        setEmailAvailable(false);
+      })
+      .catch((error) => {
+        if (error.response.status === 404) {
+          setEmailAvailable(true);
         }
       });
   }
@@ -102,11 +122,15 @@ export function MemberSignup() {
 
       <FormControl>
         <FormLabel>email</FormLabel>
-        <Input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <Flex>
+          <Input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Button onClick={handleEmailCheck}>중복체크</Button>
+        </Flex>
+        <FormErrorMessage>Email 중복체크를 해주세요.</FormErrorMessage>
       </FormControl>
       <Button
         isDisabled={!submitAvailable} // 암호가 다르거나 입력하지 않으면 가입버튼을 클릭 할 수 없게됨
