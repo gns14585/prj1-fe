@@ -39,6 +39,8 @@ export function BoardEdit() {
     });
   }
 
+  function handleSubmit() {}
+
   return (
     <Box>
       <h1>{id}번 글 수정</h1>
@@ -71,7 +73,9 @@ export function BoardEdit() {
         />
       </FormControl>
 
-      <Button colorScheme="blue">저장</Button>
+      <Button onClick={handleSubmit} colorScheme="blue">
+        저장
+      </Button>
       {/* 이전 경로는 navigate(-1) , 이전이전은 -2 */}
       <Button onClick={() => navigate(-1)}>취소</Button>
     </Box>
