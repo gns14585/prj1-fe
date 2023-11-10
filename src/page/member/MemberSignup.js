@@ -53,7 +53,7 @@ export function MemberSignup() {
         // toast
         // navigate
         toast({
-          description: "회원가입이 완료되었씁니다.",
+          description: "회원가입이 완료되었습니다.",
           status: "success",
         });
         navigate("/");
