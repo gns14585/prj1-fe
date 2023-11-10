@@ -36,8 +36,9 @@ export function MemberList() {
           {list.map((member) => (
             <Tr key={member.id}>
               <Td>{member.id}</Td>
-              <Td>{member.paswword}</Td>
+              <Td>{member.password}</Td>
               <Td>{member.email}</Td>
+              <Td>{member.inserted}</Td>
             </Tr>
           ))}
         </Tbody>
