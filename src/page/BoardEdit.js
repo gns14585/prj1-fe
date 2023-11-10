@@ -14,9 +14,6 @@ import axios from "axios";
 
 export function BoardEdit() {
   const [board, updateBoard] = useImmer(null);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [writer, setWriter] = useState("");
 
   const navigate = useNavigate();
 
@@ -37,6 +34,17 @@ export function BoardEdit() {
     updateBoard((draft) => {
       draft.title = e.target.value;
     });
+  }
+
+  function handleSubmit() {
+    // 저장 버튼 클릭 시
+    // put /api/board/edit
+
+    axios
+      .put("/api/board/edit", board)
+      .then(() => console.log("잘됨"))
+      .catch(() => console.log("안됨"))
+      .finally(() => console.log("끝"));
   }
 
   return (
@@ -71,7 +79,9 @@ export function BoardEdit() {
         />
       </FormControl>
 
-      <Button colorScheme="blue">저장</Button>
+      <Button onClick={handleSubmit} colorScheme="blue">
+        저장
+      </Button>
       {/* 이전 경로는 navigate(-1) , 이전이전은 -2 */}
       <Button onClick={() => navigate(-1)}>취소</Button>
     </Box>
