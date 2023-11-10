@@ -30,6 +30,7 @@ export function MemberList() {
             <Th>id</Th>
             <Th>pw</Th>
             <Th>email</Th>
+            <Th>subscribe</Th>
           </Tr>
         </Thead>
         <Tbody>
