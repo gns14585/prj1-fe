@@ -137,6 +137,7 @@ export function MemberSignup() {
         onClick={handleSubmit}
         colorScheme="blue"
       >
+
         가입
       </Button>
     </Box>
