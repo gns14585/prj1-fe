@@ -6,6 +6,7 @@ import {
   FormErrorMessage,
   FormLabel,
   Input,
+  useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import axios from "axios";
@@ -17,7 +18,8 @@ export function MemberSignup() {
   const [email, setEmail] = useState("");
   const [idAvailable, setIdAvailable] = useState(false);
 
-  // 암호가 다르거나, 입력하지 않았을경우 error로 인식되어서 입력해달라는 문구 추가
+  const toast = useToast();
+
   let submitAvailable = true;
 
   if (!idAvailable) {
@@ -26,7 +28,9 @@ export function MemberSignup() {
 
   if (password != passwordCheck) {
     submitAvailable = false;
-  } else if (password.length === 0) {
+  }
+
+  if (password.length === 0) {
     submitAvailable = false;
   }
 
@@ -43,24 +47,32 @@ export function MemberSignup() {
   }
 
   function handleIdCheck() {
-    // 인코딩을 대신 해주는게 URLSearchParams();
-    const searchParams = new URLSearchParams();
-    searchParams.set("id", id);
+    const searchParam = new URLSearchParams();
+    searchParam.set("id", id);
+
     axios
-      .get("/api/member/check?" + searchParams.toString())
+      .get("/api/member/check?" + searchParam.toString())
       .then(() => {
         setIdAvailable(false);
+        toast({
+          description: "이미 사용 중인 ID입니다.",
+          status: "warning",
+        });
       })
       .catch((error) => {
         if (error.response.status === 404) {
           setIdAvailable(true);
+          toast({
+            description: "사용 가능한 ID입니다.",
+            status: "success",
+          });
         }
       });
   }
 
   return (
     <Box>
-      <h1>회원가입</h1>
+      <h1>회원 가입</h1>
       <FormControl isInvalid={!idAvailable}>
         <FormLabel>id</FormLabel>
         <Flex>
@@ -75,8 +87,6 @@ export function MemberSignup() {
         </Flex>
         <FormErrorMessage>ID 중복체크를 해주세요.</FormErrorMessage>
       </FormControl>
-
-      {/* 암호를 입력하지 않았을때를 알게해줌 isInvalid */}
       <FormControl isInvalid={password.length === 0}>
         <FormLabel>password</FormLabel>
         <Input
@@ -84,11 +94,9 @@ export function MemberSignup() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        {/* 암호를 입력하지 않았을 때 나오는 문구 */}
-        <FormErrorMessage>암호를 입력해주세요.</FormErrorMessage>
-      </FormControl>
 
-      {/* 암호가 동일하지 않았을때를 알게해줌 isInvalid */}
+        <FormErrorMessage>암호를 입력해 주세요.</FormErrorMessage>
+      </FormControl>
       <FormControl isInvalid={password != passwordCheck}>
         <FormLabel>password 확인</FormLabel>
         <Input
@@ -96,20 +104,23 @@ export function MemberSignup() {
           value={passwordCheck}
           onChange={(e) => setPasswordCheck(e.target.value)}
         />
-        {/* 암호가 동일하지 않았을 때 나오는 문구 */}
         <FormErrorMessage>암호가 다릅니다.</FormErrorMessage>
       </FormControl>
-
       <FormControl>
         <FormLabel>email</FormLabel>
-        <Flex>
-          <Input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </Flex>
+        <Input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
       </FormControl>
+      <Button
+        isDisabled={!submitAvailable}
+        onClick={handleSubmit}
+        colorScheme="blue"
+      >
+        가입
+      </Button>
     </Box>
   );
 }
