@@ -1,18 +1,24 @@
 import {
   Box,
+  Button,
   FormControl,
   FormLabel,
   Input,
   Spinner,
   Textarea,
 } from "@chakra-ui/react";
-import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useImmer } from "use-immer";
 import axios from "axios";
 
 export function BoardEdit() {
   const [board, updateBoard] = useImmer(null);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [writer, setWriter] = useState("");
+
+  const navigate = useNavigate();
 
   // /edit/:id
   const { id } = useParams();
@@ -64,6 +70,10 @@ export function BoardEdit() {
           }
         />
       </FormControl>
+
+      <Button colorScheme="blue">저장</Button>
+      {/* 이전 경로는 navigate(-1) , 이전이전은 -2 */}
+      <Button onClick={() => navigate(-1)}>취소</Button>
     </Box>
   );
 }
