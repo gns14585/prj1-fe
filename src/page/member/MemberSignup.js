@@ -67,7 +67,7 @@ export function MemberSignup() {
     const searchParams = new URLSearchParams();
     searchParams.set("email", email);
     axios
-      .get("/api/email/check?" + searchParams.toString())
+      .get("/api/member/check?" + searchParams.toString())
       .then(() => {
         setEmailAvailable(false);
       })
@@ -120,13 +120,16 @@ export function MemberSignup() {
         <FormErrorMessage>암호가 다릅니다.</FormErrorMessage>
       </FormControl>
 
-      <FormControl>
+      <FormControl isInvalid={!emailAvailable}>
         <FormLabel>email</FormLabel>
         <Flex>
           <Input
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setEmailAvailable(false);
+            }}
           />
           <Button onClick={handleEmailCheck}>중복체크</Button>
         </Flex>
