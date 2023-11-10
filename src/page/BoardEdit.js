@@ -67,7 +67,7 @@ export function BoardEdit() {
           status: "error",
         });
       })
-      .finally(() => console.log("끝"));
+      .finally(() => onClose(onClose));
   }
 
   return (
