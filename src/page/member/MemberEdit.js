@@ -23,9 +23,11 @@ import {
 export function MemberEdit() {
   const [member, setMember] = useState(null);
   const [email, setEmail] = useState("");
+  const [nickName, setNickName] = useState("");
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
   const [emailAvailable, setEmailAvailable] = useState(false);
+  const [nickNameAvailable, setNickNameAvailable] = useState(false);
 
   const toast = useToast();
   const [params] = useSearchParams();
@@ -36,6 +38,7 @@ export function MemberEdit() {
     axios.get("/api/member?" + params.toString()).then((response) => {
       setMember(response.data);
       setEmail(response.data.email);
+      setNickName(response.data.nickName);
     });
   }, []);
 
@@ -43,12 +46,18 @@ export function MemberEdit() {
 
   // 기존 이메일과 같은지?
   let sameOriginEmail = false;
+  let sameOriginEmail2 = false;
 
   if (member !== null) {
     sameOriginEmail = member.email === email;
   }
 
+  if (member !== null) {
+    sameOriginEmail2 = member.nickName === nickName;
+  }
+
   let emailChecked = sameOriginEmail || emailAvailable;
+  let nickNameChecked = sameOriginEmail2 || nickNameAvailable;
 
   // 암호가 없으면 기존 암호
   // 암호를 작성하면 새 암호, 암호확인 체크
@@ -89,13 +98,36 @@ export function MemberEdit() {
         }
       });
   }
+  function handleNickNameCheck() {
+    const params = new URLSearchParams();
+    params.set("nickName", nickName);
+
+    axios
+      .get("/api/member/check?" + params)
+      .then(() => {
+        setNickNameAvailable(false);
+        toast({
+          description: "이미 사용 중인 닉네임 입니다.",
+          status: "warning",
+        });
+      })
+      .catch((error) => {
+        if (error.response.status === 404) {
+          setNickNameAvailable(true);
+          toast({
+            description: "사용 가능한 닉네임 입니다.",
+            status: "success",
+          });
+        }
+      });
+  }
 
   function handleSubmit() {
     // put /api/member/edit
     // {id, password, email}
 
     axios
-      .put("/api/member/edit", { id: member.id, password, email })
+      .put("/api/member/edit", { id: member.id, password, email, nickName })
       .then(() => {
         toast({
           description: "회원정보가 수정되었습니다.",
@@ -142,6 +174,23 @@ export function MemberEdit() {
         </FormControl>
       )}
 
+      <FormControl>
+        <FormLabel>닉네임</FormLabel>
+        <Flex>
+          <Input
+            type="text"
+            value={nickName}
+            onChange={(e) => {
+              setNickName(e.target.value);
+              setNickNameAvailable(false);
+            }}
+          />
+          <Button isDisabled={nickNameChecked} onClick={handleNickNameCheck}>
+            중복확인
+          </Button>
+        </Flex>
+      </FormControl>
+
       {/*  email을 변경하면(작성시작) 중복확인 다시 하도록  */}
       {/*  기존 email과 같으면 중복확인 안해도됨 */}
       <FormControl>
@@ -160,8 +209,9 @@ export function MemberEdit() {
           </Button>
         </Flex>
       </FormControl>
+
       <Button
-        isDisabled={!emailChecked || !passwordChecked}
+        isDisabled={!emailChecked || !passwordChecked || !nickNameChecked}
         colorScheme="blue"
         onClick={onOpen}
       >

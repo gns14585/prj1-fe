@@ -40,6 +40,7 @@ export function MemberList() {
             <Th>pw</Th>
             <Th>email</Th>
             <Th>subscribe</Th>
+            <Th>nickName</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -53,6 +54,7 @@ export function MemberList() {
               <Td>{member.password}</Td>
               <Td>{member.email}</Td>
               <Td>{member.inserted}</Td>
+              <Td>{member.nickName}</Td>
             </Tr>
           ))}
         </Tbody>
