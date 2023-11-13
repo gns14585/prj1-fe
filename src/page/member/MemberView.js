@@ -89,7 +89,12 @@ export function MemberView() {
         <Input value={member.email} readOnly />
       </FormControl>
 
-      <Button colorScheme="blue">수정</Button>
+      <Button
+        colorScheme="blue"
+        onClick={() => navigate("/member/edit?" + params.toString())}
+      >
+        수정
+      </Button>
       <Button onClick={onOpen} colorScheme="red">
         탈퇴
       </Button>
