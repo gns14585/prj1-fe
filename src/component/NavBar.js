@@ -6,6 +6,7 @@ export function NavBar() {
   const navigate = useNavigate();
 
   function handleLogOut() {
+    // TODO : 로그아웃 후 할 일 추가
     axios.post("/api/member/logout")
       .then(() => console.log("로그아웃 성공"));
   }
