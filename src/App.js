@@ -1,4 +1,4 @@
-import React, {createContext, useEffect, useState} from "react";
+import React, { createContext, useEffect, useState } from "react";
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -35,7 +35,6 @@ const routes = createBrowserRouter(
 
 export const LoginContext = createContext(null);
 
-
 function App(props) {
   const [login, setLogin] = useState("");
 
@@ -43,24 +42,27 @@ function App(props) {
     fetchLogin();
   }, []);
 
-  console.log(login)
+  console.log(login);
 
   function fetchLogin() {
-    axios.get("/api/member/login")
-      .then((response) => setLogin(response.data))
+    axios.get("/api/member/login").then((response) => setLogin(response.data));
   }
 
   function isAuthenticated() {
     return login !== "";
   }
 
-  return(
-    <LoginContext.Provider value={{login, fetchLogin, isAuthenticated}}>
+  function hasAccess(userId) {
+    return login.id === userId;
+  }
+
+  return (
+    <LoginContext.Provider
+      value={{ login, fetchLogin, isAuthenticated, hasAccess }}
+    >
       <RouterProvider router={routes} />;
     </LoginContext.Provider>
   );
 }
-
-
 
 export default App;
