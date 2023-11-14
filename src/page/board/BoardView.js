@@ -25,7 +25,7 @@ export function BoardView() {
   const [board, setBoard] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { id } = useParams();
-  const { hasAccess } = useContext(LoginContext);
+  const { hasAccess, isAdmin } = useContext(LoginContext);
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -82,7 +82,7 @@ export function BoardView() {
         <Input value={board.inserted} readOnly />
       </FormControl>
 
-      {hasAccess(board.writer) && (
+      {(hasAccess(board.writer) || isAdmin()) && (
         <Box>
           <Button colorScheme="purple" onClick={() => navigate("/edit/" + id)}>
             수정
