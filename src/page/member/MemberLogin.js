@@ -1,16 +1,22 @@
-import {Box, Button, FormControl, FormLabel, Input, useToast} from "@chakra-ui/react";
-import {useContext, useState} from "react";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  useToast,
+} from "@chakra-ui/react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import { logDOM } from "@testing-library/react";
-import {LoginContext} from "../../App";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { LoginContext } from "../../component/LoginProvider";
 
 export function MemberLogin() {
-  const {fetchLogin} = useContext(LoginContext);
+  const { fetchLogin } = useContext(LoginContext);
 
   const navigate = useNavigate();
   const toast = useToast();
-
 
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
@@ -23,14 +29,14 @@ export function MemberLogin() {
         toast({
           description: "로그인 되었습니다.",
           status: "info",
-        })
+        });
         navigate("/");
       })
       .catch(() => {
         toast({
           description: "아이디와 암호를 다시 확인해주세요.",
           status: "warning",
-        })
+        });
       })
       .finally(() => {
         fetchLogin();

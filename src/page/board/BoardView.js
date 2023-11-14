@@ -19,7 +19,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { LoginContext } from "../../App";
+import { LoginContext } from "../../component/LoginProvider";
 
 export function BoardView() {
   const [board, setBoard] = useState(null);
