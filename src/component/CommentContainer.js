@@ -20,8 +20,9 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { DeleteIcon } from "@chakra-ui/icons";
+import { LoginContext } from "./LoginProvider";
 
 function CommentForm({ boardId, isSubmitting, onSubmit }) {
   const [comment, setComment] = useState("");
@@ -41,6 +42,8 @@ function CommentForm({ boardId, isSubmitting, onSubmit }) {
 }
 
 function CommentList({ commentList, onDeleteModalOpen, isSubmitting }) {
+  const { hasAccess } = useContext(LoginContext);
+
   return (
     <Card>
       <CardHeader>
@@ -62,15 +65,18 @@ function CommentList({ commentList, onDeleteModalOpen, isSubmitting }) {
                 <Text sx={{ whiteSpace: "pre-wrap" }} pt="2" fontSize="sm">
                   {comment.comment}
                 </Text>
-                <Button
-                  isDisabled={isSubmitting}
-                  // 댓글 comment id 번호 얻어오는법
-                  onClick={() => onDeleteModalOpen(comment.id)}
-                  size="xs"
-                  colorScheme="red"
-                >
-                  <DeleteIcon />
-                </Button>
+
+                {hasAccess(comment.memberId) && (
+                  <Button
+                    isDisabled={isSubmitting}
+                    // 댓글 comment id 번호 얻어오는법
+                    onClick={() => onDeleteModalOpen(comment.id)}
+                    size="xs"
+                    colorScheme="red"
+                  >
+                    <DeleteIcon />
+                  </Button>
+                )}
               </Flex>
             </Box>
           ))}
@@ -85,6 +91,8 @@ export function CommentContainer({ boardId }) {
   const [commentList, setCommentList] = useState([]);
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [id, setId] = useState(0);
+
+  const { isAuthenticated } = useContext(LoginContext);
 
   useEffect(() => {
     if (!isSubmitting) {
@@ -125,11 +133,13 @@ export function CommentContainer({ boardId }) {
   }
   return (
     <Box>
-      <CommentForm
-        boardId={boardId}
-        isSubmittin={isSubmitting}
-        onSubmit={handleSubmit}
-      />
+      {isAuthenticated() && (
+        <CommentForm
+          boardId={boardId}
+          isSubmittin={isSubmitting}
+          onSubmit={handleSubmit}
+        />
+      )}
       <CommentList
         boardId={boardId}
         isSubmitting={isSubmitting}
