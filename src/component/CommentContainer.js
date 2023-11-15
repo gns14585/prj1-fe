@@ -20,7 +20,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { LoginContext } from "./LoginProvider";
 
@@ -90,7 +90,10 @@ export function CommentContainer({ boardId }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [commentList, setCommentList] = useState([]);
   const { isOpen, onClose, onOpen } = useDisclosure();
-  const [id, setId] = useState(0);
+
+  // const [id, setId] = useState(0);
+  // useRef: 컴포넌트에서 임시로 값을 저장하는 용도로 사용 , useState대신 사용해도됨 둘이 비슷함
+  const commentIdRef = useRef(0);
 
   const { isAuthenticated } = useContext(LoginContext);
 
@@ -111,7 +114,7 @@ export function CommentContainer({ boardId }) {
     // TODO : 모달, then, catch, finally
 
     setIsSubmitting(true);
-    axios.delete("/api/comment/" + id).finally(() => {
+    axios.delete("/api/comment/" + commentIdRef.current).finally(() => {
       setIsSubmitting(false);
       onClose();
     });
@@ -127,7 +130,8 @@ export function CommentContainer({ boardId }) {
 
   function handleDeleteModalOpen(id) {
     // id를 어딘가 저장
-    setId(id);
+    // setId(id)
+    commentIdRef.current = id;
     // 모달 열기
     onOpen();
   }
