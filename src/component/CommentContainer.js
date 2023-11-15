@@ -1,4 +1,12 @@
-import { Box, Button, Textarea } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Spinner,
+  Textarea,
+} from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -28,11 +36,23 @@ function CommentList({ boardId }) {
     params.set("id", boardId);
 
     axios
+      // + 연산자(toString()) 때문에 .toString() 안적어도 됨 단, .toString()을 적어주는게 안전함
       .get("/api/comment/list?" + params)
       .then((response) => setCommentList(response.data));
   }, []);
 
-  return <Box></Box>;
+  if (commentList == null) {
+    return <Spinner />;
+  }
+
+  return (
+    <Box>
+      <h1>댓글</h1>
+      {commentList.map((commentList) => (
+        <Input value={commentList.comment} readOnly />
+      ))}
+    </Box>
+  );
 }
 
 export function CommentContainer({ boardId }) {
