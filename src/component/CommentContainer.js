@@ -32,14 +32,7 @@ function CommentForm({ boardId, isSubmitting, onSubmit }) {
   );
 }
 
-function CommentList({ commentList }) {
-  // 댓글 comment id 번호 얻어오는법
-  function handleDelete(id) {
-    // console.log(id + "번 댓글 삭제");
-    // TODO : then, catch, finally
-    axios.delete("/api/comment/" + id);
-  }
-
+function CommentList({ commentList, onDelete, isSubmitting }) {
   return (
     <Card>
       <CardHeader>
@@ -62,8 +55,9 @@ function CommentList({ commentList }) {
                   {comment.comment}
                 </Text>
                 <Button
+                  isDisabled={isSubmitting}
                   // 댓글 comment id 번호 얻어오는법
-                  onClick={() => handleDelete(comment.id)}
+                  onClick={() => onDelete(comment.id)}
                   size="xs"
                   colorScheme="red"
                 >
@@ -93,6 +87,15 @@ export function CommentContainer({ boardId }) {
     }
   }, [isSubmitting]);
 
+  function handleDelete(id) {
+    // 댓글 comment id 번호 얻어오는법
+    // console.log(id + "번 댓글 삭제");
+    // TODO : 모달, 삭제 후 리스트 업데이트, then, catch, finally
+
+    setIsSubmitting(true);
+    axios.delete("/api/comment/" + id).finally(() => setIsSubmitting(false));
+  }
+
   function handleSubmit(comment) {
     setIsSubmitting(true);
 
@@ -108,7 +111,12 @@ export function CommentContainer({ boardId }) {
         isSubmittin={isSubmitting}
         onSubmit={handleSubmit}
       />
-      <CommentList boardId={boardId} commentList={commentList} />
+      <CommentList
+        boardId={boardId}
+        isSubmitting={isSubmitting}
+        commentList={commentList}
+        onDelete={handleDelete}
+      />
     </Box>
   );
 }
