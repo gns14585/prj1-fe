@@ -6,13 +6,21 @@ import {
   CardHeader,
   Flex,
   Heading,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Stack,
   StackDivider,
   Text,
   Textarea,
+  useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DeleteIcon } from "@chakra-ui/icons";
 
 function CommentForm({ boardId, isSubmitting, onSubmit }) {
@@ -32,7 +40,7 @@ function CommentForm({ boardId, isSubmitting, onSubmit }) {
   );
 }
 
-function CommentList({ commentList, onDelete, isSubmitting }) {
+function CommentList({ commentList, onDeleteModalOpen, isSubmitting }) {
   return (
     <Card>
       <CardHeader>
@@ -57,7 +65,7 @@ function CommentList({ commentList, onDelete, isSubmitting }) {
                 <Button
                   isDisabled={isSubmitting}
                   // 댓글 comment id 번호 얻어오는법
-                  onClick={() => onDelete(comment.id)}
+                  onClick={() => onDeleteModalOpen(comment.id)}
                   size="xs"
                   colorScheme="red"
                 >
@@ -75,6 +83,8 @@ function CommentList({ commentList, onDelete, isSubmitting }) {
 export function CommentContainer({ boardId }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [commentList, setCommentList] = useState([]);
+  const { isOpen, onClose, onOpen } = useDisclosure();
+  const [id, setId] = useState(0);
 
   useEffect(() => {
     if (!isSubmitting) {
@@ -87,13 +97,16 @@ export function CommentContainer({ boardId }) {
     }
   }, [isSubmitting]);
 
-  function handleDelete(id) {
+  function handleDelete() {
     // 댓글 comment id 번호 얻어오는법
     // console.log(id + "번 댓글 삭제");
-    // TODO : 모달, 삭제 후 리스트 업데이트, then, catch, finally
+    // TODO : 모달, then, catch, finally
 
     setIsSubmitting(true);
-    axios.delete("/api/comment/" + id).finally(() => setIsSubmitting(false));
+    axios.delete("/api/comment/" + id).finally(() => {
+      setIsSubmitting(false);
+      onClose();
+    });
   }
 
   function handleSubmit(comment) {
@@ -104,6 +117,12 @@ export function CommentContainer({ boardId }) {
       .finally(() => setIsSubmitting(false));
   }
 
+  function handleDeleteModalOpen(id) {
+    // id를 어딘가 저장
+    setId(id);
+    // 모달 열기
+    onOpen();
+  }
   return (
     <Box>
       <CommentForm
@@ -115,8 +134,29 @@ export function CommentContainer({ boardId }) {
         boardId={boardId}
         isSubmitting={isSubmitting}
         commentList={commentList}
-        onDelete={handleDelete}
+        onDeleteModalOpen={handleDeleteModalOpen}
       />
+
+      {/* 삭제 모달 */}
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>삭제 확인</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>삭제 하시겠습니까?</ModalBody>
+
+          <ModalFooter>
+            <Button onClick={onClose}>닫기</Button>
+            <Button
+              isDisabled={isSubmitting}
+              onClick={handleDelete}
+              colorScheme="red"
+            >
+              삭제
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }
