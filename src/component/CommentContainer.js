@@ -41,7 +41,7 @@ function CommentList({ commentList }) {
         <Stack divider={<StackDivider />} spacing="4">
           {/* map 반복문을 통해 해당 코드 실행 */}
           {commentList.map((comment) => (
-            <Box>
+            <Box key={comment.id}>
               <Flex justifyContent="space-between">
                 {/* memberId 작성자 아이디 */}
                 <Heading size="xs">{comment.memberId}</Heading>
