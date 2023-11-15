@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { DeleteIcon } from "@chakra-ui/icons";
 
 function CommentForm({ boardId, isSubmitting, onSubmit }) {
   const [comment, setComment] = useState("");
@@ -32,6 +33,13 @@ function CommentForm({ boardId, isSubmitting, onSubmit }) {
 }
 
 function CommentList({ commentList }) {
+  // 댓글 comment id 번호 얻어오는법
+  function handleDelete(id) {
+    // console.log(id + "번 댓글 삭제");
+    // TODO : then, catch, finally
+    axios.delete("/api/comment/" + id);
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -48,10 +56,20 @@ function CommentList({ commentList }) {
                 {/* inserted 댓글 작성 시간 */}
                 <Text fontSize="xs">{comment.inserted}</Text>
               </Flex>
-              {/* 댓글 작성하고 엔터키 누를경우 한줄로 표시되는데, sx={{ whiteSpace: "pre-wrap" }} 작성하게되면 엔터키 누른만큼 표시됨 */}
-              <Text sx={{ whiteSpace: "pre-wrap" }} pt="2" fontSize="sm">
-                {comment.comment}
-              </Text>
+              <Flex justifyContent="space-between" alignItems="center">
+                {/* 댓글 작성하고 엔터키 누를경우 한줄로 표시되는데, sx={{ whiteSpace: "pre-wrap" }} 작성하게되면 엔터키 누른만큼 표시됨 */}
+                <Text sx={{ whiteSpace: "pre-wrap" }} pt="2" fontSize="sm">
+                  {comment.comment}
+                </Text>
+                <Button
+                  // 댓글 comment id 번호 얻어오는법
+                  onClick={() => handleDelete(comment.id)}
+                  size="xs"
+                  colorScheme="red"
+                >
+                  <DeleteIcon />
+                </Button>
+              </Flex>
             </Box>
           ))}
         </Stack>
