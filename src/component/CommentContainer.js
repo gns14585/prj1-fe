@@ -14,20 +14,19 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-function CommentForm({ boardId }) {
+function CommentForm({ boardId, isSubmitting, onSubmit }) {
   const [comment, setComment] = useState("");
 
   function handleSubmit() {
-    axios.post("/api/comment/add", {
-      boardId,
-      comment,
-    });
+    onSubmit({ boardId, comment });
   }
 
   return (
     <Box>
       <Textarea value={comment} onChange={(e) => setComment(e.target.value)} />
-      <Button onClick={handleSubmit}>쓰기</Button>
+      <Button isDisabled={isSubmitting} onClick={handleSubmit}>
+        쓰기
+      </Button>
     </Box>
   );
 }
@@ -52,12 +51,16 @@ function CommentList({ boardId }) {
       <CardBody>
         <Stack divider={<StackDivider />} spacing="4">
           {/* TODO : 댓글 작성 후 re-render */}
+          {/* map 반복문을 통해 해당 코드 실행 */}
           {commentList.map((comment) => (
             <Box>
               <Flex justifyContent="space-between">
+                {/* memberId 작성자 아이디 */}
                 <Heading size="xs">{comment.memberId}</Heading>
+                {/* inserted 댓글 작성 시간 */}
                 <Text fontSize="xs">{comment.inserted}</Text>
               </Flex>
+              {/* 댓글 작성하고 엔터키 누를경우 한줄로 표시되는데, sx={{ whiteSpace: "pre-wrap" }} 작성하게되면 엔터키 누른만큼 표시됨 */}
               <Text sx={{ whiteSpace: "pre-wrap" }} pt="2" fontSize="sm">
                 {comment.comment}
               </Text>
@@ -70,9 +73,23 @@ function CommentList({ boardId }) {
 }
 
 export function CommentContainer({ boardId }) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  function handleSubmit(comment) {
+    setIsSubmitting(true);
+
+    axios
+      .post("/api/comment/add", comment)
+      .finally(() => setIsSubmitting(false));
+  }
+
   return (
     <Box>
-      <CommentForm boardId={boardId} />
+      <CommentForm
+        boardId={boardId}
+        isSubmittin={isSubmitting}
+        onSubmit={handleSubmit}
+      />
       <CommentList boardId={boardId} />
     </Box>
   );
