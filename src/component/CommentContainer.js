@@ -64,7 +64,7 @@ function CommentItem({
       .put("/api/comment/edit", { id: comment.id, comment: commentEdited })
       .then(() => {
         toast({
-          description: "댓글이 수정되었습니다.",
+          description: "댓글이 수정되었습니다..",
           status: "success",
         });
       })
