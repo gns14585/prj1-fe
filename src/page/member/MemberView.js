@@ -35,13 +35,13 @@ export function MemberView() {
     axios
       .get("/api/member?" + params.toString())
       .then((response) => setMember(response.data))
-      .catch(error => {
-        navigate("/login")
+      .catch((error) => {
+        navigate("/login");
         toast({
           description: "권한이 없습니다.",
-          status: "warning"
-        })
-      })
+          status: "warning",
+        });
+      });
   }, []);
 
   if (member === null) {
@@ -64,8 +64,6 @@ export function MemberView() {
           status: "success",
         });
         navigate("/");
-
-        // TODO : 로그아웃 기능 추가하기
       })
       .catch((error) => {
         if (error.response.status === 401 || error.response.status === 403) {
