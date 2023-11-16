@@ -23,7 +23,7 @@ import {
 import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { DeleteIcon, EditIcon, NotAllowedIcon } from "@chakra-ui/icons";
-import { LoginContext } from "./LogInProvider";
+import { LoginContext } from "./LoginProvider";
 
 function CommentForm({ boardId, isSubmitting, onSubmit }) {
   const [comment, setComment] = useState("");
@@ -92,7 +92,7 @@ function CommentItem({
   return (
     <Box>
       <Flex justifyContent="space-between">
-        <Heading size="xs">{comment.memberId}</Heading>
+        <Heading size="xs">닉네임 : {comment.memberNickName}</Heading>
         <Text fontSize="xs">{comment.inserted}</Text>
       </Flex>
       <Flex justifyContent="space-between" alignItems="center">
