@@ -42,6 +42,34 @@ function CommentForm({ boardId, isSubmitting, onSubmit }) {
   );
 }
 
+function CommentItem({ comment, onDeleteModalOpen }) {
+  const { hasAccess } = useContext(LoginContext);
+
+  return (
+    <Box>
+      <Flex justifyContent="space-between">
+        <Heading size="xs">{comment.memberId}</Heading>
+        <Text fontSize="xs">{comment.inserted}</Text>
+      </Flex>
+      <Flex justifyContent="space-between" alignItems="center">
+        <Text sx={{ whiteSpace: "pre-wrap" }} pt="2" fontSize="sm">
+          {comment.comment}
+        </Text>
+
+        {hasAccess(comment.memberId) && (
+          <Button
+            onClick={() => onDeleteModalOpen(comment.id)}
+            size="xs"
+            colorScheme="red"
+          >
+            <DeleteIcon />
+          </Button>
+        )}
+      </Flex>
+    </Box>
+  );
+}
+
 function CommentList({ commentList, onDeleteModalOpen, isSubmitting }) {
   const { hasAccess } = useContext(LoginContext);
 
@@ -53,28 +81,11 @@ function CommentList({ commentList, onDeleteModalOpen, isSubmitting }) {
       <CardBody>
         <Stack divider={<StackDivider />} spacing="4">
           {commentList.map((comment) => (
-            <Box key={comment.id}>
-              <Flex justifyContent="space-between">
-                <Heading size="xs">{comment.memberId}</Heading>
-                <Text fontSize="xs">{comment.inserted}</Text>
-              </Flex>
-              <Flex justifyContent="space-between" alignItems="center">
-                <Text sx={{ whiteSpace: "pre-wrap" }} pt="2" fontSize="sm">
-                  {comment.comment}
-                </Text>
-
-                {hasAccess(comment.memberId) && (
-                  <Button
-                    isDisabled={isSubmitting}
-                    onClick={() => onDeleteModalOpen(comment.id)}
-                    size="xs"
-                    colorScheme="red"
-                  >
-                    <DeleteIcon />
-                  </Button>
-                )}
-              </Flex>
-            </Box>
+            <CommentItem
+              key={comment.id}
+              comment={comment}
+              onDeleteModalOpen={onDeleteModalOpen}
+            />
           ))}
         </Stack>
       </CardBody>
