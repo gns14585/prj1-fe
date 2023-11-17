@@ -13,6 +13,8 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ChatIcon } from "@chakra-ui/icons";
+import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export function BoardList() {
   const [boardList, setBoardList] = useState(null);
@@ -37,6 +39,9 @@ export function BoardList() {
           <Thead>
             <Tr>
               <Th>id</Th>
+              <Th>
+                <FontAwesomeIcon icon={fullHeart} />
+              </Th>
               <Th>title</Th>
               <Th>by</Th>
               <Th>at</Th>
@@ -52,6 +57,7 @@ export function BoardList() {
                 onClick={() => navigate("/board/" + board.id)}
               >
                 <Td>{board.id}</Td>
+                <Td>{board.countLike != 0 && board.countLike}</Td>
                 <Td>
                   {board.title}
                   {board.countComment > 0 && (
