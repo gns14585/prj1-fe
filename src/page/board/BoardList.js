@@ -19,6 +19,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export function BoardList() {
   const [boardList, setBoardList] = useState(null);
+
+  // 페이지 받는 info
+  const [pageInfo, setPageInfo] = useState(null);
+
   const [params] = useSearchParams();
 
   console.log(params.toString());
@@ -26,9 +30,10 @@ export function BoardList() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get("/api/board/list?" + params)
-      .then((response) => setBoardList(response.data));
+    axios.get("/api/board/list?" + params).then((response) => {
+      setBoardList(response.data.boardList);
+      setPageInfo(response.data.pageInfo);
+    });
   }, [params]); // 경로가 바뀔때마다 해당 데이터를 다시 가져옴
 
   if (boardList === null) {
