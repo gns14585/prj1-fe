@@ -68,7 +68,7 @@ export function BoardList() {
                   )}
                 </Td>
                 <Td>{board.nickName}</Td>
-                <Td>{board.inserted}</Td>
+                <Td>{board.ago}</Td>
               </Tr>
             ))}
           </Tbody>
