@@ -25,19 +25,22 @@ import {
 import { LoginContext } from "../../component/LoginProvider";
 import { CommentContainer } from "../../component/CommentContainer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
+// 아이콘 import 같은 경우 동일한 이름이라 별칭으로 구분 가능
+import { faHeart as emptyHeart } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
 
 function LikeContainer({ like, onClick }) {
   if (like == null) {
     return <Spinner />;
   }
   return (
-    <Button variant="ghost" size="xl" onClick={onClick}>
-      {/*<FontAwesomeIcon icon={faHeart} size="xl" />*/}
-      {like.like && <Text>꽉찬 하트</Text>}
-      {like.like || <Text>빈 하트</Text>}
-      <Text>{like.countLike}</Text>
-    </Button>
+    <Flex gap={2}>
+      <Button variant="ghost" size="xl" onClick={onClick}>
+        {like.like && <FontAwesomeIcon icon={fullHeart} size="xl" />}
+        {like.like || <FontAwesomeIcon icon={emptyHeart} size="xl" />}
+      </Button>
+      <Heading size="lg">{like.countLike}</Heading>
+    </Flex>
   );
 }
 
