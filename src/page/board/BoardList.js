@@ -12,7 +12,9 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { ChatIcon } from "@chakra-ui/icons";
+import { ChatIcon, StarIcon } from "@chakra-ui/icons";
+import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export function BoardList() {
   const [boardList, setBoardList] = useState(null);
@@ -61,7 +63,15 @@ export function BoardList() {
                     </Badge>
                   )}
                 </Td>
-                <Td>{board.nickName}</Td>
+                <Td>
+                  {board.nickName}
+                  {board.countLike > 0 && (
+                    <Badge>
+                      <FontAwesomeIcon icon={fullHeart} size="xl" />
+                      {board.countLike}
+                    </Badge>
+                  )}
+                </Td>
                 <Td>{board.inserted}</Td>
               </Tr>
             ))}
