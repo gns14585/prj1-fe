@@ -3,6 +3,8 @@ import {
   Badge,
   Box,
   Button,
+  Flex,
+  Input,
   Spinner,
   Table,
   Tbody,
@@ -62,6 +64,29 @@ function Pagination({ pageInfo }) {
           <FontAwesomeIcon icon={faAngleRight} />
         </Button>
       )}
+    </Box>
+  );
+}
+
+// 검색 컴포넌트
+function SearchComponent() {
+  const [keyword, setKeyword] = useState("");
+  const navigate = useNavigate();
+
+  function handleSearch() {
+    // /?k=keyword
+    const params = new URLSearchParams();
+    params.set("k", keyword);
+
+    navigate("/?" + params);
+  }
+
+  return (
+    <Box>
+      <Flex>
+        <Input value={keyword} onChange={(e) => setKeyword(e.target.value)} />
+        <Button onClick={handleSearch}>검색</Button>
+      </Flex>
     </Box>
   );
 }
@@ -128,6 +153,9 @@ export function BoardList() {
           </Tbody>
         </Table>
       </Box>
+
+      {/* 검색 컴포넌트 */}
+      <SearchComponent />
 
       <Pagination pageInfo={pageInfo} />
     </Box>
