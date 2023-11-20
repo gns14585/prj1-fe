@@ -23,6 +23,24 @@ import {
   faHeart as fullHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as PropTypes from "prop-types";
+
+function PageButton({ variant, pageNumber, children }) {
+  // 검색을 했을때 p=pageNumber&k=keyword(검색내용)
+  const [params] = useSearchParams();
+  const navigate = useNavigate();
+
+  function handleClick() {
+    params.set("p", pageNumber);
+    navigate("/?" + params);
+  }
+
+  return (
+    <Button variant={variant} onClick={handleClick}>
+      {children}
+    </Button>
+  );
+}
 
 function Pagination({ pageInfo }) {
   const pageNumbers = [];
@@ -45,15 +63,15 @@ function Pagination({ pageInfo }) {
       )}
 
       {pageNumbers.map((pageNumber) => (
-        <Button
+        <PageButton
           key={pageNumber}
           variant={
             pageNumber === pageInfo.currentPageNumber ? "solid" : "ghost"
           }
-          onClick={() => navigate("/?p=" + pageNumber)}
+          pageNumber={pageNumber}
         >
           {pageNumber}
-        </Button>
+        </PageButton>
       ))}
 
       {pageInfo.nextPageNumber && (
@@ -76,8 +94,7 @@ function SearchComponent() {
   function handleSearch() {
     // /?k=keyword
     const params = new URLSearchParams();
-    params.set("k", keyword);
-
+    params.set("k", keyword); // k=value{keyword}
     navigate("/?" + params);
   }
 
