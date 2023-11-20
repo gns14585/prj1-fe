@@ -42,6 +42,25 @@ function PageButton({ variant, pageNumber, children }) {
   );
 }
 
+function LeftPageButton({ variant, pageNumber, children }) {
+  const [params] = useSearchParams();
+  const navigate = useNavigate();
+
+  function handleLeftClick() {}
+
+  return (
+    <Button variant={variant} onClikc={handleLeftClick}>
+      {children}
+    </Button>
+  );
+}
+
+LeftPageButton.propTypes = {
+  onClick: PropTypes.func,
+  variant: PropTypes.string,
+  children: PropTypes.node,
+};
+
 function Pagination({ pageInfo }) {
   const pageNumbers = [];
 
@@ -54,12 +73,12 @@ function Pagination({ pageInfo }) {
   return (
     <Box>
       {pageInfo.prevPageNumber && (
-        <Button
+        <LeftPageButton
           variant="ghost"
           onClick={() => navigate("/?p=" + pageInfo.prevPageNumber)}
         >
           <FontAwesomeIcon icon={faAngleLeft} />
-        </Button>
+        </LeftPageButton>
       )}
 
       {pageNumbers.map((pageNumber) => (
