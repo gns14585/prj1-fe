@@ -5,6 +5,7 @@ import {
   Button,
   Flex,
   Input,
+  Select,
   Spinner,
   Table,
   Tbody,
@@ -85,17 +86,27 @@ function Pagination({ pageInfo }) {
 function SearchComponent() {
   const [keyword, setKeyword] = useState("");
   const navigate = useNavigate();
+  const [category, setCategory] = useState(null);
 
   function handleSearch() {
-    // /?k=keyword
+    // /?k=keyword&c=all
     const params = new URLSearchParams();
     params.set("k", keyword); // k=value{keyword}
+    params.set("c", category);
+
     navigate("/?" + params);
   }
 
   return (
     <Box>
       <Flex>
+        <Select onChange={(e) => setCategory(e.target.value)}>
+          <option selected value="all">
+            전체
+          </option>
+          <option value="title">제목</option>
+          <option value="content">본문</option>
+        </Select>
         <Input value={keyword} onChange={(e) => setKeyword(e.target.value)} />
         <Button onClick={handleSearch}>검색</Button>
       </Flex>
