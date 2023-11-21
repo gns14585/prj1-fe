@@ -2,7 +2,9 @@ import {
   Box,
   Button,
   FormControl,
+  FormHelperText,
   FormLabel,
+  Image,
   Input,
   Modal,
   ModalBody,
@@ -23,6 +25,7 @@ import axios from "axios";
 
 export function BoardEdit() {
   const [board, updateBoard] = useImmer(null);
+  const [uploadFiles, setUploadFiles] = useState(null);
 
   const navigate = useNavigate();
 
@@ -54,7 +57,7 @@ export function BoardEdit() {
     // put /api/board/edit
 
     axios
-      .put("/api/board/edit", board)
+      .putForm("/api/board/edit", { board, uploadFiles })
       .then(() => {
         toast({
           description: board.id + "번 게시글이 수정 되었습니다.",
@@ -97,6 +100,19 @@ export function BoardEdit() {
             });
           }}
         />
+      </FormControl>
+
+      <FormControl>
+        <FormLabel>이미지</FormLabel>
+        <Input
+          type="file"
+          accept="image/*"
+          multiple // 파일을 여러개 올릴 수 있게 해주는 prop
+          onChange={(e) => setUploadFiles(e.target.files)}
+        />
+        <FormHelperText>
+          한개 파일은 1MB 이내, 총 용량은 10MB 이내로 첨부하세요.
+        </FormHelperText>
       </FormControl>
 
       <Button onClick={onOpen} colorScheme="blue">
