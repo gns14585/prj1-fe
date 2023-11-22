@@ -47,6 +47,9 @@ export function NavBar() {
       {isAuthenticated() && <Box>{login.nickName}님</Box>}
 
       <Button
+        borderRadius={0}
+        variant="ghost"
+        size="lg"
         leftIcon={<FontAwesomeIcon icon={faHouse} />}
         onClick={() => navigate("/")}
       >
@@ -54,6 +57,9 @@ export function NavBar() {
       </Button>
       {isAuthenticated() && (
         <Button
+          borderRadius={0}
+          variant="ghost"
+          size="lg"
           leftIcon={<FontAwesomeIcon icon={faPen} />}
           onClick={() => navigate("/write")}
         >
@@ -62,6 +68,9 @@ export function NavBar() {
       )}
       {isAuthenticated() || (
         <Button
+          borderRadius={0}
+          variant="ghost"
+          size="lg"
           leftIcon={<FontAwesomeIcon icon={faUserPlus} />}
           onClick={() => navigate("/signup")}
         >
@@ -70,6 +79,9 @@ export function NavBar() {
       )}
       {isAdmin() && (
         <Button
+          borderRadius={0}
+          variant="ghost"
+          size="lg"
           leftIcon={<FontAwesomeIcon icon={faUsers} />}
           onClick={() => navigate("/member/list")}
         >
@@ -78,6 +90,9 @@ export function NavBar() {
       )}
       {isAuthenticated() && (
         <Button
+          borderRadius={0}
+          variant="ghost"
+          size="lg"
           leftIcon={<FontAwesomeIcon icon={faUser} />}
           onClick={() => navigate("/member?" + urlParams.toString())}
         >
@@ -86,6 +101,9 @@ export function NavBar() {
       )}
       {isAuthenticated() || (
         <Button
+          borderRadius={0}
+          variant="ghost"
+          size="lg"
           leftIcon={<FontAwesomeIcon icon={faRightToBracket} />}
           onClick={() => navigate("/login")}
         >
@@ -94,6 +112,9 @@ export function NavBar() {
       )}
       {isAuthenticated() && (
         <Button
+          borderRadius={0}
+          variant="ghost"
+          size="lg"
           leftIcon={<FontAwesomeIcon icon={faRightFromBracket} />}
           onClick={handleLogOut}
         >
