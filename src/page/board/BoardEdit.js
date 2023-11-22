@@ -1,9 +1,17 @@
 import {
   Box,
   Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Center,
+  Divider,
+  Flex,
   FormControl,
   FormHelperText,
   FormLabel,
+  Heading,
   Image,
   Input,
   Modal,
@@ -105,65 +113,82 @@ export function BoardEdit() {
   }
 
   return (
-    <Box>
-      <h1>{id}번 글 수정</h1>
-      <FormControl>
-        <FormLabel>제목</FormLabel>
-        <Input value={board.title} onChange={handleTitleChange} />
-      </FormControl>
+    <Center>
+      <Card w={"lg"}>
+        <CardHeader>
+          <Heading>{id}번 글 수정</Heading>
+        </CardHeader>
+        <CardBody>
+          <FormControl mb={5}>
+            <FormLabel>제목</FormLabel>
+            <Input
+              value={board.title}
+              onChange={(e) =>
+                updateBoard((draft) => {
+                  draft.title = e.target.value;
+                })
+              }
+            />
+          </FormControl>
+          <FormControl mb={5}>
+            <FormLabel>본문</FormLabel>
+            <Textarea
+              value={board.content}
+              onChange={(e) =>
+                updateBoard((draft) => {
+                  draft.content = e.target.value;
+                })
+              }
+            />
+          </FormControl>
+          {/* 이미지 출력 */}
+          {board.files.length > 0 &&
+            board.files.map((file) => (
+              <Card key={file.id} my={5}>
+                <CardBody>
+                  <Image src={file.url} alt={file.name} width="100%" />
+                </CardBody>
+                <Divider />
+                <CardFooter>
+                  <FormControl display="flex" alignItems="center" gap={2}>
+                    <FormLabel m={0} p={0}>
+                      <FontAwesomeIcon color="red" icon={faTrashCan} />
+                    </FormLabel>
+                    <Switch
+                      value={file.id}
+                      colorScheme="red"
+                      onChange={handleRemoveFileSwitch}
+                    />
+                  </FormControl>
+                </CardFooter>
+              </Card>
+            ))}
 
-      <FormControl>
-        <FormLabel>본문</FormLabel>
-        <Textarea
-          value={board.content}
-          onChange={(e) => {
-            updateBoard((draft) => {
-              draft.content = e.target.value;
-            });
-          }}
-        />
-      </FormControl>
+          {/* 추가할 파일 선택 */}
+          <FormControl mb={5}>
+            <FormLabel>이미지</FormLabel>
+            <Input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={(e) => setUploadFiles(e.target.files)}
+            />
+            <FormHelperText>
+              한 개 파일은 1MB 이내, 총 용량은 10MB 이내로 첨부하세요.
+            </FormHelperText>
+          </FormControl>
+        </CardBody>
 
-      {/* 이미지 수정 코드 */}
-      {board.files.length > 0 &&
-        board.files.map((file) => (
-          <Box key={file.id} my="5px" border="3px solid black">
-            <FormControl display="flex" alignItems="center">
-              <FormLabel>
-                <FontAwesomeIcon icon={faTrashCan} color="red" />
-              </FormLabel>
-              <Switch
-                value={file.id}
-                colorScheme="red"
-                onChange={handleRemoveFileSwitch}
-              />
-            </FormControl>
-            <Box>
-              <Image src={file.url} alt={file.name} width="100%" />
-            </Box>
-          </Box>
-        ))}
-
-      {/* 추가할 파일 선택 */}
-      <FormControl>
-        <FormLabel>이미지</FormLabel>
-        <Input
-          type="file"
-          accept="image/*"
-          multiple // 파일을 여러개 올릴 수 있게 해주는 prop
-          onChange={(e) => setUploadFiles(e.target.files)}
-        />
-        <FormHelperText>
-          한개 파일은 1MB 이내, 총 용량은 10MB 이내로 첨부하세요.
-        </FormHelperText>
-      </FormControl>
-
-      <Button onClick={onOpen} colorScheme="blue">
-        저장
-      </Button>
-      {/* 이전 경로는 navigate(-1) , 이전이전은 -2 */}
-      <Button onClick={() => navigate(-1)}>취소</Button>
-
+        <CardFooter>
+          <Flex gap={2}>
+            <Button colorScheme="blue" onClick={onOpen}>
+              저장
+            </Button>
+            {/* navigate(-1) : 이전 경로로 이동 */}
+            <Button onClick={() => navigate(-1)}>취소</Button>
+          </Flex>
+        </CardFooter>
+      </Card>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -179,6 +204,6 @@ export function BoardEdit() {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </Box>
+    </Center>
   );
 }
