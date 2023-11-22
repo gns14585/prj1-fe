@@ -133,6 +133,7 @@ function CommentItem({
           <Box>
             {isEditing || (
               <Button
+                variant="ghost"
                 size="xs"
                 colorScheme="purple"
                 onClick={() => setIsEditing(true)}
@@ -142,6 +143,7 @@ function CommentItem({
             )}
             {isEditing && (
               <Button
+                variant="ghost"
                 size="xs"
                 colorScheme="gray"
                 onClick={() => setIsEditing(false)}
@@ -150,6 +152,7 @@ function CommentItem({
               </Button>
             )}
             <Button
+              variant="ghost"
               onClick={() => onDeleteModalOpen(comment.id)}
               size="xs"
               colorScheme="red"
@@ -172,24 +175,23 @@ function CommentList({
   const { hasAccess } = useContext(LoginContext);
 
   return (
-    <Card>
-      <CardHeader>
-        <Heading size="md">댓글 리스트</Heading>
-      </CardHeader>
-      <CardBody>
-        <Stack divider={<StackDivider />} spacing="4">
-          {commentList.map((comment) => (
-            <CommentItem
-              key={comment.id}
-              isSubmitting={isSubmitting}
-              setIsSubmitting={setIsSubmitting}
-              comment={comment}
-              onDeleteModalOpen={onDeleteModalOpen}
-            />
-          ))}
-        </Stack>
-      </CardBody>
-    </Card>
+    <Center mt={20}>
+      <Card w={"lg"}>
+        <CardBody>
+          <Stack divider={<StackDivider />} spacing="4">
+            {commentList.map((comment) => (
+              <CommentItem
+                key={comment.id}
+                isSubmitting={isSubmitting}
+                setIsSubmitting={setIsSubmitting}
+                comment={comment}
+                onDeleteModalOpen={onDeleteModalOpen}
+              />
+            ))}
+          </Stack>
+        </CardBody>
+      </Card>
+    </Center>
   );
 }
 
