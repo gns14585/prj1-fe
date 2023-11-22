@@ -3,8 +3,15 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Center,
+  Flex,
   FormControl,
   FormLabel,
+  Heading,
   Input,
   Modal,
   ModalBody,
@@ -82,32 +89,43 @@ export function MemberView() {
   }
 
   return (
-    <Box>
-      <h1>{member.id}님 정보</h1>
-      <FormControl>
-        <FormLabel>password</FormLabel>
-        <Input type="text" value={member.password} readOnly />
-      </FormControl>
+    <Center>
+      <Card w={"lg"}>
+        <CardHeader>
+          <Heading>{member.id}님 정보</Heading>
+        </CardHeader>
 
-      <FormControl>
-        <FormLabel>별명</FormLabel>
-        <Input type="text" value={member.nickName} readOnly />
-      </FormControl>
+        <CardBody>
+          <FormControl mb={2}>
+            <FormLabel>password</FormLabel>
+            <Input type="text" value={member.password} readOnly />
+          </FormControl>
 
-      <FormControl>
-        <FormLabel>Email</FormLabel>
-        <Input value={member.email} readOnly />
-      </FormControl>
+          <FormControl mb={2}>
+            <FormLabel>별명</FormLabel>
+            <Input type="text" value={member.nickName} readOnly />
+          </FormControl>
 
-      <Button
-        colorScheme="blue"
-        onClick={() => navigate("/member/edit?" + params.toString())}
-      >
-        수정
-      </Button>
-      <Button onClick={onOpen} colorScheme="red">
-        탈퇴
-      </Button>
+          <FormControl mb={2}>
+            <FormLabel>Email</FormLabel>
+            <Input value={member.email} readOnly />
+          </FormControl>
+        </CardBody>
+
+        <CardFooter>
+          <Flex gap={1}>
+            <Button
+              colorScheme="blue"
+              onClick={() => navigate("/member/edit?" + params.toString())}
+            >
+              수정
+            </Button>
+            <Button onClick={onOpen} colorScheme="red">
+              탈퇴
+            </Button>
+          </Flex>
+        </CardFooter>
+      </Card>
 
       {/* 삭제 모달 */}
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -125,6 +143,6 @@ export function MemberView() {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </Box>
+    </Center>
   );
 }
