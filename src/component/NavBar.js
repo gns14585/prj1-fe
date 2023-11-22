@@ -43,7 +43,7 @@ export function NavBar() {
   }
 
   return (
-    <Flex>
+    <Flex mb={10}>
       <Button
         borderRadius={0}
         variant="ghost"
