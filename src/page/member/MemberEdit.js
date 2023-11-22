@@ -170,7 +170,7 @@ export function MemberEdit() {
         </CardHeader>
 
         <CardBody>
-          <FormControl mb={2}>
+          <FormControl mb={5}>
             <FormLabel>password</FormLabel>
             <Input
               type="text"
@@ -183,7 +183,7 @@ export function MemberEdit() {
           </FormControl>
 
           {password.length > 0 && (
-            <FormControl mb={2}>
+            <FormControl mb={5}>
               <FormLabel>password 확인</FormLabel>
               <Input
                 type="text"
@@ -195,7 +195,7 @@ export function MemberEdit() {
 
           <FormControl mb={2}>
             <FormLabel>nickName</FormLabel>
-            <Flex gap={2}>
+            <Flex gap={5}>
               <Input
                 type="text"
                 value={nickName}
