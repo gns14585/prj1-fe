@@ -4,6 +4,11 @@ import axios from "axios";
 import {
   Box,
   Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Center,
   Flex,
   FormControl,
   FormLabel,
@@ -105,47 +110,60 @@ export function BoardView() {
 
   return (
     <Box>
-      <Flex justifyContent="space-between">
-        <Heading size="xl">{board.id}번 글 보기</Heading>
-        <LikeContainer like={like} onClick={handleLike} />
-      </Flex>
-      <FormControl>
-        <FormLabel>제목</FormLabel>
-        <Input value={board.title} readOnly />
-      </FormControl>
+      <Center>
+        <Card w={"lg"}>
+          <CardHeader>
+            <Flex justifyContent="space-between">
+              <Heading size="xl">{board.id}번 글 보기</Heading>
+              <LikeContainer like={like} onClick={handleLike} />
+            </Flex>
+          </CardHeader>
+          <CardBody>
+            <FormControl mb={5}>
+              <FormLabel>제목</FormLabel>
+              <Input value={board.title} readOnly />
+            </FormControl>
+            <FormControl mb={5}>
+              <FormLabel>본문</FormLabel>
+              <Textarea h={"sm"} value={board.content} readOnly />
+            </FormControl>
 
-      <FormControl>
-        <FormLabel>본문</FormLabel>
-        <Textarea value={board.content} readOnly />
-      </FormControl>
+            {/* 이미지 출력 */}
+            {board.files.map((file) => (
+              <Card key={file.id} my={5}>
+                <CardBody>
+                  <Image width="100%" src={file.url} alt={file.name} />
+                </CardBody>
+              </Card>
+            ))}
 
-      {/* 이미지 출력 */}
-      {board.files.map((file) => (
-        <Box key={file.id} my="5px" border="3px solid black">
-          <Image width="100%" src={file.url} alt={file.name} />
-        </Box>
-      ))}
+            <FormControl mb={5}>
+              <FormLabel>작성자</FormLabel>
+              <Input value={board.nickName} readOnly />
+            </FormControl>
+            <FormControl mb={5}>
+              <FormLabel>작성일시</FormLabel>
+              <Input value={board.inserted} readOnly />
+            </FormControl>
+          </CardBody>
 
-      <FormControl>
-        <FormLabel>작성자</FormLabel>
-        <Input value={board.nickName} readOnly />
-      </FormControl>
-
-      <FormControl>
-        <FormLabel>작성일시</FormLabel>
-        <Input value={board.inserted} readOnly />
-      </FormControl>
-
-      {(hasAccess(board.writer) || isAdmin()) && (
-        <Box>
-          <Button colorScheme="purple" onClick={() => navigate("/edit/" + id)}>
-            수정
-          </Button>
-          <Button colorScheme="red" onClick={onOpen}>
-            삭제
-          </Button>
-        </Box>
-      )}
+          <CardFooter>
+            {(hasAccess(board.writer) || isAdmin()) && (
+              <Flex gap={2}>
+                <Button
+                  colorScheme="purple"
+                  onClick={() => navigate("/edit/" + id)}
+                >
+                  수정
+                </Button>
+                <Button colorScheme="red" onClick={onOpen}>
+                  삭제
+                </Button>
+              </Flex>
+            )}
+          </CardFooter>
+        </Card>
+      </Center>
 
       {/* 삭제 모달 */}
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -163,7 +181,6 @@ export function BoardView() {
           </ModalFooter>
         </ModalContent>
       </Modal>
-
       <CommentContainer boardId={id} />
     </Box>
   );
