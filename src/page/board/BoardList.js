@@ -104,10 +104,11 @@ function SearchComponent() {
   return (
     <Box>
       <Flex>
-        <Select onChange={(e) => setCategory(e.target.value)}>
-          <option selected value="all">
-            전체
-          </option>
+        <Select
+          defaultValue="all"
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          <option value="all">전체</option>
           <option value="title">제목</option>
           <option value="content">본문</option>
         </Select>
