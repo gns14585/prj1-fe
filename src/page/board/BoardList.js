@@ -175,13 +175,13 @@ export function BoardList() {
                 <Td>
                   {board.title}
                   {board.countComment > 0 && (
-                    <Badge>
+                    <Badge ml={2}>
                       <ChatIcon />
                       {board.countComment}
                     </Badge>
                   )}
                   {board.countFile > 0 && (
-                    <Badge>
+                    <Badge ml={2}>
                       <FontAwesomeIcon icon={faImages} />
                       {board.countFile}
                     </Badge>
