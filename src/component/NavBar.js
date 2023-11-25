@@ -64,10 +64,8 @@ export function NavBar() {
           작성
         </Button>
       )}
-
       {/* 간격 넓히는  */}
       <Spacer />
-
       {isAuthenticated() || (
         <Button
           borderRadius={0}
@@ -123,6 +121,7 @@ export function NavBar() {
           로그아웃
         </Button>
       )}
+      ;
     </Flex>
   );
 }
