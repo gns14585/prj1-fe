@@ -69,7 +69,7 @@ export function MemberSignup() {
         navigate("/");
       })
       .catch((error) => {
-        if (error.response.status === 400) {
+        if (error.response.status === 401 || error.response.status === 403) {
           toast({
             description: "입력 값을 확인해주세요",
             status: "error",
